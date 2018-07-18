@@ -1,0 +1,14 @@
+-level 1
+Wizard ## Fire = 1 Pyromancer 7 2 Magic "A wizard that specializes in fire. Also known to eat burnt sandwiches.
+Wizard ## Water = 1 Hydromancer 6 3 Magic "A wizard that specializes in waterbending. Makes sandwiches soggy.
+Wizard ## Electricity = 1 Scientist 7 1 Science "A wizard of the modern world. Evolved to eat more PB&Js.
+Fairy ## Water = 1 Healer 2 6 Magic "A magical fairy that heals people.
+-level 2
+Electricity ## Water = 2 Energy 5 0 Science "A force that powers things.
+Energy ## Energy = 2 Nuclear_Energy 8 0 Science "An even greater force that powers things.
+-level 3
+Nuclear_Energy ## Scientist = 3 Megalomaniac 10 4 "Someone SO obsessed with power, he/she didn't make sandwiches anymore.
+Energy ## Scientist = 3 Wind_Turbine 8 2 "His creation was so big, it literally blew the judges away.
+-level 4
+Wind_Turbine ## Wizard = 4 Cloud_Giant 14 6 "He evaporates in the summertime.
+
