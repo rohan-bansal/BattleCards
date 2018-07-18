@@ -12,13 +12,12 @@ _15% complete_
 
 1. Download JDK 8+ (java dev kit)
 2. Clone this repository
-3. Navigate into the src directory
 
 **IMPORTANT** _The program uses certain sequences to put color in the terminal, so it may not work in Windows._
 
-**`.java` file:**
+**To run the `.java` file:**
 
-1. Open terminal, and type `javac Main.java` if there is no class file
-2. type `java Main`
+1. Open terminal outside of the src directory, and type `javac src/Main.java` if there is no class file
+2. type `java src/Main`
 
 
