@@ -1,5 +1,3 @@
-package main.java.com.rohan;
-
 public class Card {
     private String name;
     private int damage;
@@ -15,9 +13,9 @@ public class Card {
         this.lore = lore;
     }
 
-    public void getFullStats() {
+    public void getFullStats() throws java.lang.Exception {
         System.out.println("-----------------");
-        System.out.println("===NAME - " + name + "===\n===DAMAGE - " + damage + "===\n===BLOCK - " + block + "===\n===TYPE - " + cardType + "===\n===DESC: " + lore + "===");
+        Main.TypeLine("===NAME - " + name + "===\n===DAMAGE - " + damage + "===\n===BLOCK - " + block + "===\n===TYPE - " + cardType + "===\n===DESC: " + lore + "===\n");
         System.out.println("-----------------");
     }
 
