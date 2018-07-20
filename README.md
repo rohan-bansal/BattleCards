@@ -1,7 +1,7 @@
 # AlchemyCards
 A console-based game in which cards are used to represent attacks.
 
-_15% complete_
+_45% complete_
 
 ## Features
 - Multiple levels
