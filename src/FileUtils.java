@@ -1,5 +1,3 @@
-package main.java.com.rohan;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
