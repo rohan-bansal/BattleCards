@@ -1,4 +1,4 @@
-# AlchemyCards
+# BattleCards
 A console-based game in which cards are used to represent attacks.
 
 _45% complete_
@@ -13,11 +13,14 @@ _45% complete_
 1. Download JDK 8+ (java dev kit)
 2. Clone this repository
 
-**IMPORTANT** _The program uses certain sequences to put color in the terminal, so it may not work in Windows._
+**IMPORTANT** 
+
+- _The program uses certain sequences to put color in the terminal, so it may not work in Windows._
+- _The java file may not find the external packages. Download the jar file, if possible._
+
 
 **To run the `.java` file:**
 
-1. Open terminal outside of the src directory, and type `javac src/Main.java` if there is no class file
-2. type `java src/Main`
+1. Use IntelliJ IDEA, place json jars in external libraries. :P
 
 
