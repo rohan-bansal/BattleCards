@@ -17,6 +17,7 @@ public class Main {
 
     public static String datafile;
     public static String combofile;
+
     public static String jsondata;
 
     public static boolean newAccount;
@@ -31,6 +32,10 @@ public class Main {
         String ph;
 
         datafile = System.getProperty("user.dir");
+        if(datafile.endsWith("/src")) {
+            datafile = datafile.substring(0, datafile.indexOf("/src"));
+            System.out.println(datafile);
+        }
         combofile = datafile + "/src/data/Combinations.txt";
         datafile = datafile + "/src/data/gameData.json";
 
