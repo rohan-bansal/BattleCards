@@ -8,22 +8,23 @@ public class GameUtils {
     public ArrayList<Card> currentdeck;
     public ArrayList<Card> inventory;
     public ArrayList<Card> overall;
+    int multiplier;
 
     public GameUtils() {
         currentdeck = new ArrayList<Card>() {{
-            add(new Card("Wizard", 5, 1, "Basic", "A human with magical abilities.\nKnown to eat sandwiches from time to time."));
-            add(new Card("Fire", 3, 0, "Basic", "A very hot gas/fuel substance\nthat can cause severe burns."));
-            add(new Card("Water", 2, 0, "Basic", "Essential for life, no \ndefinite volume."));
-            add(new Card("Fairy", 4, 2, "Basic", "A tiny magical human that can \nfly."));
-            add(new Card("Electricity", 5, 0, "Basic", "A form of energy resulting \nfrom charged particles."));
+            add(new Card("Wizard", 5, 1, "Basic", "A human with magical abilities.\nKnown to eat sandwiches from time to time.", 1));
+            add(new Card("Fire", 3, 0, "Basic", "A very hot gas/fuel substance\nthat can cause severe burns.", 1));
+            add(new Card("Water", 2, 0, "Basic", "Essential for life, no \ndefinite volume.", 1));
+            add(new Card("Fairy", 4, 2, "Basic", "A tiny magical human that can \nfly.", 1));
+            add(new Card("Electricity", 5, 0, "Basic", "A form of energy resulting \nfrom charged particles.", 1));
         }};
         overall = new ArrayList<>(currentdeck);
         inventory = new ArrayList<>();
     }
 
     public void addCard(String name, int damage, int block, String cardType, String lore) {
-        inventory.add(new Card(name, damage, block, cardType, lore));
-        overall.add(new Card(name, damage, block, cardType, lore));
+        inventory.add(new Card(name, damage, block, cardType, lore, 1));
+        overall.add(new Card(name, damage, block, cardType, lore, 1));
     }
 
     public void listcards(ArrayList<Card> deck) throws java.lang.Exception {
@@ -66,7 +67,7 @@ public class GameUtils {
                 }
 
                 if(Integer.parseInt(getdata2[0]) > Main.playerlevel) {
-                    System.out.println(Main.ANSI_RED + "You need to become player level " + getdata2[0] + " to combine those cards.");
+                    Main.TypeLine(Main.ANSI_RED + "You need to become player level " + getdata2[0] + " to combine those cards.");
                     return;
                 } else if(Main.dust < Integer.parseInt(getdata2[1])) {
                     Main.TypeLine(Main.ANSI_RED + "You do not have enough dust. (" + getdata2[1] + " needed)" + Main.ANSI_RESET);
@@ -82,7 +83,7 @@ public class GameUtils {
                             Main.TypeLine(Main.ANSI_GREEN + "Do you want to add " + getdata2[2] + " to your battle deck? [y/n] : " + Main.ANSI_RESET);
                             ph = in.nextLine();
                             if(ph.equals("y")) {
-                                currentdeck.add(new Card(getdata2[2],  Integer.parseInt(getdata2[3]), Integer.parseInt(getdata2[4]), getdata2[5], getdata3[1]));
+                                currentdeck.add(new Card(getdata2[2],  Integer.parseInt(getdata2[3]), Integer.parseInt(getdata2[4]), getdata2[5], getdata3[1], 1));
                             } else {
 
                             }
@@ -94,5 +95,46 @@ public class GameUtils {
             }
         }
         Main.TypeLine(Main.ANSI_RED + "Those two cards cannot be combined.\n" + Main.ANSI_RESET);
+    }
+
+    public void upgradeCard(String name) throws java.lang.Exception {
+        Scanner in = new Scanner(System.in);
+        String ph;
+        for(Card item : overall) {
+            if(item.getName().toLowerCase().equals(name.toLowerCase())) {
+                switch(item.getCardType()) {
+                    case "Basic":
+                        multiplier = 8;
+                        break;
+                    case "Magic":
+                        multiplier = 10;
+                        break;
+                    case "Science":
+                        multiplier = 9;
+                        break;
+                    case "Life":
+                        multiplier = 10;
+                        break;
+                }
+                Main.TypeLine(Main.ANSI_YELLOW + "Upgrading " + item.getName() + " costs " + (item.getLevel() * multiplier) + " dust. Continue? [y/n] : " + Main.ANSI_RESET);
+                ph = in.nextLine();
+                if(ph.equals("y")) {
+                    if(item.getLevel()*multiplier > Main.dust) {
+                        Main.TypeLine(Main.ANSI_RED + "Not enough dust." + Main.ANSI_RESET);
+                        return;
+                    }
+                    Main.dust -= item.getLevel() * multiplier;
+                    item.setLevel(item.getLevel() + 1);
+                    Main.TypeLine(Main.ANSI_GREEN + "Successfully upgraded " + item.getName() + " to level " + item.getLevel() + ".\nYou now have " + Main.dust + " dust left.\nAfter Upgrade: \n" + Main.ANSI_RESET);
+                    item.setDamage(item.getDamage() + 1);
+                    item.setBlock(item.getBlock() + 1);
+                    item.getFullStats();
+                    return;
+                } else {
+                    return;
+                }
+            }
+        }
+        Main.TypeLine(Main.ANSI_RED + "The card specified is not in your inventory/Battle deck, or does not exist." + Main.ANSI_RESET);
     }
 }
