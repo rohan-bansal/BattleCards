@@ -19,7 +19,7 @@ public class GameUtils {
             add(new Card("Electricity", 5, 0, "Basic", "A form of energy resulting \nfrom charged particles.", 1));
         }};
         overall = new ArrayList<>(currentdeck);
-        inventory = new ArrayList<>();
+        inventory = new ArrayList<>(currentdeck);
     }
 
     public void addCard(String name, int damage, int block, String cardType, String lore) {
@@ -137,4 +137,64 @@ public class GameUtils {
         }
         Main.TypeLine(Main.ANSI_RED + "The card specified is not in your inventory/Battle deck, or does not exist." + Main.ANSI_RESET);
     }
+
+    void modifyDeck() throws java.lang.Exception {
+        Scanner in = new Scanner(System.in);
+        String ph;
+        Main.TypeLine(Main.ANSI_YELLOW + "To add a card from inventory to battle deck, type 'ADD (cardName)'\nTo remove a card from battledeck, type 'REMOVE (cardName)'\n" +
+                "To see battle deck, type 'b'\nTo see inventory, type 'i'\nTo quit, type 'q'\n\n" + Main.ANSI_RESET);
+        while(true) {
+            Main.TypeLine(Main.ANSI_YELLOW + "\n>> " + Main.ANSI_RESET);
+            ph = in.nextLine();
+            if(ph.toLowerCase().equals("b")) {
+                listcards(currentdeck);
+            } else if(ph.toLowerCase().equals("i")) {
+                listcards(inventory);
+            } else if(ph.toLowerCase().equals("q")) {
+                return;
+            } else if(ph.length() > 1) {
+                if(ph.substring(0,3).toLowerCase().equals("add")) {
+                    if(isCard(ph.substring(4), overall)) {
+                        if(currentdeck.contains(toCard(ph.substring(4)))) {
+                            Main.TypeLine(Main.ANSI_RED + "This card is already in the battle deck." + Main.ANSI_RESET);
+                        } else {
+                            currentdeck.add(toCard(ph.substring(4)));
+                        }
+                    } else {
+                        Main.TypeLine(Main.ANSI_RED + "That card does not exist." + Main.ANSI_RESET);
+                    }
+
+                } else if(ph.substring(0,6).toLowerCase().equals("remove")) {
+                    if(isCard(ph.substring(7), overall)) {
+                        if(currentdeck.contains(toCard(ph.substring(7)))) {
+                            currentdeck.remove(currentdeck.indexOf(toCard(ph.substring(7))));
+                        } else {
+                            Main.TypeLine(Main.ANSI_RED + "This card is not in your battle deck." + Main.ANSI_RESET);
+                        }
+                    } else {
+                        Main.TypeLine(Main.ANSI_RED + "That card does not exist." + Main.ANSI_RESET);
+                    }
+
+                }
+            }
+        }
+    }
+
+     boolean isCard(String ph, ArrayList<Card> deck) {
+        for(Card item : deck) {
+            if(item.getName().toLowerCase().equals(ph.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+     }
+
+     Card toCard(String ph) {
+        for(Card item : overall) {
+            if(item.getName().toLowerCase().equals(ph.toLowerCase())) {
+                return item;
+            }
+        }
+        return new Card("Blank", 0, 0, "Blank", "Blank", 0);
+     }
 }
