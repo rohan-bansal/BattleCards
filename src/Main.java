@@ -91,8 +91,8 @@ public class Main {
     static void Menu(Scanner in, GameUtils gu) throws java.lang.Exception {
         String ph;
         TypeLine(ANSI_BLUE + "\n==========MENU==========" + ANSI_RESET);
-        TypeLine(ANSI_GREEN + "\n\t[p] Play level " + playlevel + ANSI_PURPLE + "\n\t[f] Forge a New Card" + ANSI_YELLOW + "\n\t[u] to upgrade a card" + ANSI_WHITE + "\n\t[c] to view current deck" +
-                "\n\t[m] Modify current deck\n\t[v] View Card Inventory\n\t[l] Check player level\n\t[d] View amount of dust in balance\n\t[e] View this menu\n\t'STATS' (nameOfCard) to see card statistics\n\t" + "\u001B[22m" + "        i.e STATS Wizard" + ANSI_RESET);
+        TypeLine(ANSI_GREEN + "\n\t[p] Play level " + playlevel + ANSI_PURPLE + "\n\t[f] Forge a New Card" + ANSI_YELLOW + "\n\t[u] to upgrade a card" + ANSI_WHITE + "\n\t[c] to view Battle Deck" +
+                "\n\t[m] Modify Battle Deck\n\t[v] View Card Inventory\n\t[l] Check player level\n\t[d] View amount of dust in balance\n\t[e] View this menu\n\t'STATS' (nameOfCard) to see card statistics\n\t" + "\u001B[22m" + "        i.e STATS Wizard" + ANSI_RESET);
         while(true) {
             TypeLine(ANSI_YELLOW + "\n[type a letter] --> " + ANSI_RESET);
             ph = in.nextLine();
@@ -105,7 +105,7 @@ public class Main {
             } else if(ph.toLowerCase().equals("c")) {
                 gu.listcards(gu.currentdeck);
             } else if(ph.toLowerCase().equals("m")) {
-
+                gu.modifyDeck();
             } else if(ph.toLowerCase().equals("u")) {
                 TypeLine(ANSI_PURPLE + "Name of the Card: " + ANSI_RESET);
                 ph = in.nextLine();
@@ -137,10 +137,12 @@ public class Main {
 
             } else if(ph.toLowerCase().equals("d")) {
                 TypeLine(ANSI_GREEN + ANSI_BOLD + "Dust: " + dust + ANSI_RESET);
-            } else if(ph.substring(0,5).toLowerCase().equals("stats")) {
-                for(Card part : gu.currentdeck) {
-                    if((part.getName().toLowerCase()).equals(ph.substring(6).toLowerCase())) {
-                        part.getFullStats();
+            } else if(ph.length() > 1) {
+                if(ph.substring(0,5).toLowerCase().equals("stats")) {
+                    for(Card part : gu.currentdeck) {
+                        if((part.getName().toLowerCase()).equals(ph.substring(6).toLowerCase())) {
+                            part.getFullStats();
+                        }
                     }
                 }
             } else {
