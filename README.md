@@ -1,7 +1,7 @@
 # BattleCards
 A console-based game in which cards are used to represent attacks.
 
-_45% complete_
+_68% complete_
 
 ## Features
 - Multiple levels
