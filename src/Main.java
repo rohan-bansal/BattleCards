@@ -23,8 +23,10 @@ public class Main {
     public static boolean newAccount;
 
     public static int playerlevel = 1;
-    public static int playlevel = 1;
-    public static int dust = 100;
+    public static int playerEXP = 0;
+    public static int playGamelevel = 1;
+    public static int playerHP = 40;
+    public static int dust = 20;
 
     public static void main(String[] args) throws java.lang.Exception {
         GameUtils gameutils = new GameUtils();
@@ -80,7 +82,7 @@ public class Main {
             ph = in.nextLine();
             if (ph.toLowerCase().equals("cards")) {
                 gameutils.listcards(gameutils.currentdeck);
-                TypeLine(ANSI_BLUE + "These are your current cards.\nUsing the cards, you face opponents and try to defeat them.\nHere is the menu: " + ANSI_RESET);
+                TypeLine(ANSI_BLUE + "These are your current cards.\nUsing the cards (and others that you create), you face opponents and try to defeat them.\nHere is the menu: " + ANSI_RESET);
                 Menu(in, gameutils);
             }
         } else {
@@ -91,15 +93,17 @@ public class Main {
     static void Menu(Scanner in, GameUtils gu) throws java.lang.Exception {
         String ph;
         TypeLine(ANSI_BLUE + "\n==========MENU==========" + ANSI_RESET);
-        TypeLine(ANSI_GREEN + "\n\t[p] Play level " + playlevel + ANSI_PURPLE + "\n\t[f] Forge a New Card" + ANSI_YELLOW + "\n\t[u] to upgrade a card" + ANSI_WHITE + "\n\t[c] to view Battle Deck" +
+        TypeLine(ANSI_GREEN + "\n\t[p] Play level " + playGamelevel + ANSI_PURPLE + "\n\t[f] Forge a New Card" + ANSI_YELLOW + "\n\t[u] to upgrade a card" + ANSI_WHITE + "\n\t[c] to view Battle Deck" +
                 "\n\t[m] Modify Battle Deck\n\t[v] View Card Inventory\n\t[l] Check player level\n\t[d] View amount of dust in balance\n\t[e] View this menu\n\t'STATS' (nameOfCard) to see card statistics\n\t" + "\u001B[22m" + "        i.e STATS Wizard" + ANSI_RESET);
         while(true) {
             TypeLine(ANSI_YELLOW + "\n[type a letter] --> " + ANSI_RESET);
             ph = in.nextLine();
             if(ph.toLowerCase().equals("e")) {
                 Menu(in, gu);
+                break;
             } else if(ph.toLowerCase().equals("l")) {
-                TypeLine(ANSI_BOLD + ANSI_GREEN + "Your player is currently at level " + playerlevel + "\n" + ANSI_RESET);
+                TypeLine(ANSI_BOLD + ANSI_GREEN + "Your player is currently at level " + playerlevel + ".\n" + ANSI_RESET);
+                TypeLine(ANSI_WHITE + ANSI_BOLD + "XP points to next level: " + (50 - playerEXP) + "." + ANSI_RESET);
             } else if(ph.toLowerCase().equals("v")) {
                 gu.listcards(gu.inventory);
             } else if(ph.toLowerCase().equals("c")) {
@@ -134,7 +138,7 @@ public class Main {
                     gu.combineCards(temp3.get(0),  temp3.get(1));
                 }
             } else if(ph.toLowerCase().equals("p")) {
-
+                gu.playlevel();
             } else if(ph.toLowerCase().equals("d")) {
                 TypeLine(ANSI_GREEN + ANSI_BOLD + "Dust: " + dust + ANSI_RESET);
             } else if(ph.length() > 1) {
