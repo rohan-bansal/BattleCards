@@ -30,7 +30,7 @@ public class FileUtils {
         try(FileWriter writer = new FileWriter(Main.datafile, true)) {
             writer.write(prettyJsonString);
             writer.flush();
-            System.out.println("Creating Account...\nSuccess.");
+            System.out.println("Creating Account...\nLinking to JSON file...\nSuccess.");
         }
         prettyify();
     }
