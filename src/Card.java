@@ -15,9 +15,9 @@ public class Card {
         this.level = level;
     }
 
-    public void getFullStats() throws java.lang.Exception {
+    public void getFullStats() {
         System.out.println("-----------------");
-        Main.TypeLine("===NAME - " + name + "===\n===DAMAGE - " + damage + "===\n===BLOCK - " + block + "===\n===TYPE - " + cardType + "===\n===DESC: " + lore + "===\n");
+        System.out.println("===NAME - " + name + "===\n===LEVEL - " + level + "===\n===DAMAGE - " + damage + "===\n===BLOCK - " + block + "===\n===TYPE - " + cardType + "===\n===DESC: " + lore + "===\n");
         System.out.println("-----------------");
     }
 
