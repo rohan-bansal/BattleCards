@@ -1,14 +1,20 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class GameUtils {
+
 
     public ArrayList<Card> currentdeck;
     public ArrayList<Card> inventory;
     public ArrayList<Card> overall;
-    int multiplier;
+    private int multiplier;
+    private Card selected;
 
     public GameUtils() {
         currentdeck = new ArrayList<Card>() {{
@@ -174,10 +180,120 @@ public class GameUtils {
                     } else {
                         Main.TypeLine(Main.ANSI_RED + "That card does not exist." + Main.ANSI_RESET);
                     }
-
                 }
             }
         }
+    }
+
+    void playlevel() throws java.lang.Exception {
+        Scanner in = new Scanner(System.in);
+        String ph;
+        String[] enemyCardNames = {"Wizard", "Electricity", "Fairy", "Fire", "Water", "Pyromancer", "Hydromancer", "Knight", "Snake", "Illusion", "Elf", "Arch Mage", "Golem", "Death", "Angel",
+                "Necromancer", "Guardian", "Nightmare", "Horse", "Troll", "Dark Mage", "Superhero"};
+        String[] enemyNames = {"Dugthomoth the Demon", "Brag'than the Human", "Thoz'gog the Werewolf", "Orzok the Ghost", "Sauron the Eyeball", "Vor'an the Witch", "Hobnigs the Goblin", "Zoggarth the Elf",
+                "Mel the Troll", "Edzar the Human", "Eddrin the Dragon", "Tehung the Whale", "Pyragon the Warlock", "Cherdir the Dragon", "VyKun the Scientist"};
+        String activeName = enemyNames[Main.playGamelevel - 1];
+        int[] enemyCardAttack = new int[enemyCardNames.length];
+        int[] enemyCardBlock = new int[enemyCardNames.length];
+        Card[] enemyCards = new Card[enemyCardNames.length];
+        int enemyHP = 40;
+
+        Card[] playerDeck = new Card[3];
+
+        for(int x = 0; x < enemyCardNames.length; x++) {
+            int randomNum = ThreadLocalRandom.current().nextInt(Main.playerlevel + 1,  Main.playerlevel + 4);
+            enemyCardAttack[x] = randomNum;
+        }
+        for(int y = 0; y < enemyCardNames.length; y++) {
+            int randomNum = ThreadLocalRandom.current().nextInt(0,  Main.playerlevel + 2);
+            enemyCardBlock[y] = randomNum;
+        }
+        for(int z = 0; z < enemyCardNames.length; z++) {
+            enemyCards[z] = new Card(enemyCardNames[z], enemyCardAttack[z], enemyCardBlock[z], "???", "???", 1);
+        }
+        Main.TypeLine(Main.ANSI_GREEN + Main.ANSI_BOLD + "LEVEL " + Main.playGamelevel + "\n" + Main.ANSI_RESET);
+        Main.TypeLine(Main.ANSI_GREEN + "You are fighting " + activeName + " (40 HP).\nYou will choose 1 of 3 cards in your battle deck to play\nagainst " + activeName + " repeatedly, and the first to bring the other's" +
+                "\nhealth points to 0, wins.\n(You start with 40 HP)\n" + Main.ANSI_RESET);
+        int check = 0;
+        while(true) {
+            Main.TypeLine(Main.ANSI_BLUE + "Enter to Continue... " + Main.ANSI_RESET);
+            in.nextLine();
+            refreshCards(playerDeck);
+            do {
+                Main.TypeLine(Main.ANSI_BOLD + Main.ANSI_PURPLE + "\nSelect a card (from above) to play: " + Main.ANSI_RESET);
+                ph = in.nextLine();
+            } while(!isCard(ph, new ArrayList<Card>(Arrays.asList(playerDeck))));
+            for(Card item : playerDeck) {
+                if(item.getName().toLowerCase().equals(ph.toLowerCase())) {
+                    selected = item;
+                    check = 4;
+                    break;
+                } else {
+                    check++;
+                }
+            }
+            int rnd = new Random().nextInt(enemyCards.length);
+            Card enemyCurrent = enemyCards[rnd];
+            Main.TypeLine(Main.ANSI_GREEN + "You play " + Main.ANSI_BOLD + selected.getName() + Main.ANSI_RESET + Main.ANSI_GREEN + " || Damage = " + selected.getDamage() + " || DmgBlock = " + selected.getBlock() + "\n" + Main.ANSI_RESET);
+            Main.TypeLine(Main.ANSI_PURPLE + activeName + " plays " + Main.ANSI_BOLD + enemyCurrent.getName() + Main.ANSI_RESET + Main.ANSI_PURPLE + " || Damage = " + enemyCurrent.getDamage() + " || DmgBlock = " + enemyCurrent.getBlock() + "\n" + Main.ANSI_RESET);
+            TimeUnit.SECONDS.sleep(1);
+            int enemyToDamage = selected.getDamage() - enemyCurrent.getBlock();
+            if(enemyToDamage < 0) enemyToDamage = 0;
+            int playerToDamage = enemyCurrent.getDamage() - selected.getBlock();
+            if(playerToDamage < 0) playerToDamage = 0;
+
+            Main.TypeLine(Main.ANSI_BLUE + activeName + " : -" + enemyToDamage + " Hit Points\n");
+            Main.TypeLine("Player : -" + playerToDamage + " Hit Points\n");
+            Main.playerHP -= playerToDamage;
+            enemyHP -= enemyToDamage;
+            displayHealth("Player", Main.playerHP);
+            displayHealth(activeName, enemyHP);
+            if(Main.playerHP <= 0) {
+                Main.TypeLine(Main.ANSI_RED + activeName + " won the round! Good luck next time.\n" + Main.ANSI_RESET);
+                return;
+            } else if(enemyHP <= 0) {
+                Main.TypeLine(Main.ANSI_GREEN + "You have defeated " + activeName + "! Earned 10 dust, and 15 EXP\n");
+                Main.dust += 10;
+                Main.playGamelevel += 1;
+                Main.playerEXP += 15;
+                Main.playerHP = 40;
+                if(Main.playerEXP >= 50) {
+                    Main.TypeLine(Main.ANSI_YELLOW + "Player level increased to " + (Main.playerlevel + 1) + ".\n" + Main.ANSI_RESET);
+                    Main.playerlevel += 1;
+                }
+
+                return;
+            }
+
+        }
+    }
+
+    void refreshCards(Card[] playerDeck) throws java.lang.Exception {
+        int y = 0;
+        while(true) {
+            int rnd = new Random().nextInt(currentdeck.size());
+            if(Arrays.asList(playerDeck).contains(currentdeck.get(rnd))) {
+                rnd = new Random().nextInt(currentdeck.size());
+            }
+            playerDeck[y] = currentdeck.get(rnd);
+            playerDeck[y].getFullStats();
+            TimeUnit.MILLISECONDS.sleep(500);
+            y++;
+            if(y == 3) {
+                break;
+            }
+        }
+    }
+
+    void displayHealth(String who, int health) throws java.lang.Exception {
+        Main.TypeLine(Main.ANSI_YELLOW + who + "'s HP : " + Main.ANSI_RESET);
+        for(int x = 1; x < health + 1; x++) {
+            System.out.print(Main.ANSI_BLACK + "=" + Main.ANSI_RESET);
+        }
+        for(int y = 1; y < (40 - health) + 1; y++) {
+            System.out.print(Main.ANSI_BLACK + "-" + Main.ANSI_RESET);
+        }
+        System.out.print(Main.ANSI_GREEN + " (" + health + ") \n" + Main.ANSI_RESET);
     }
 
      boolean isCard(String ph, ArrayList<Card> deck) {
