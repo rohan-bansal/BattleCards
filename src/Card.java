@@ -41,6 +41,10 @@ public class Card {
         return level;
     }
 
+    public String getLore() {
+        return lore;
+    }
+
     public void setLevel(int level) {
         this.level = level;
     }
