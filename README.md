@@ -1,7 +1,7 @@
 # BattleCards
 A console-based game in which cards are used to represent attacks.
 
-_90% complete_
+_100% complete_
 
 ## Features
 - Multiple levels
@@ -21,14 +21,14 @@ _90% complete_
 
 **To run the `.java` file:**
 
-1. Use IntelliJ IDEA, place json jars in external libraries. :P
+1. Use IntelliJ IDEA, place json jars in external libraries. :P (for now, I am not using Maven/Gradle)
 
 
 ### IMAGES
 
 _Menu Screen_
 
-![Menu Screen](https://github.com/Rohan-Bansal/BattleCards/blob/master/images/Menu.png)
+![Menu Screen](https://github.com/Rohan-Bansal/BattleCards/blob/master/images/GameMenu.png)
 
 _Login/Account Creation_
 
@@ -37,3 +37,11 @@ _Login/Account Creation_
 _New User Introduction_
 
 ![New User Introduction](https://github.com/Rohan-Bansal/BattleCards/blob/master/images/Introduction.png)
+
+_Card Forge_
+
+![Card Forge](https://github.com/Rohan-Bansal/BattleCards/blob/master/images/CardForge.png)
+
+_Playing a level_
+
+![level1](https://github.com/Rohan-Bansal/BattleCards/blob/master/images/PlayingALevel.png)
