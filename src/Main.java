@@ -11,13 +11,12 @@ public class Main {
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
     public static final String ANSI_BOLD = "\u001B[1m";
 
     public static String datafile;
     public static String combofile;
-
+    public static String username;
     public static String jsondata;
 
     public static boolean newAccount;
@@ -26,7 +25,7 @@ public class Main {
     public static int playerEXP = 0;
     public static int playGamelevel = 1;
     public static int playerHP = 40;
-    public static int dust = 20;
+    public static int dust = 100;
 
     public static void main(String[] args) throws java.lang.Exception {
         GameUtils gameutils = new GameUtils();
@@ -36,7 +35,6 @@ public class Main {
         datafile = System.getProperty("user.dir");
         if(datafile.endsWith("/src")) {
             datafile = datafile.substring(0, datafile.indexOf("/src"));
-            System.out.println(datafile);
         }
         combofile = datafile + "/src/data/Combinations.txt";
         datafile = datafile + "/src/data/gameData.json";
@@ -46,6 +44,7 @@ public class Main {
             TypeLine(ANSI_GREEN + "\nUsername ['--' if you do not have an account] : " + ANSI_RESET);
             ph = in.nextLine();
             if(FileUtils.checkinDataBase(ph)) {
+                username = ph;
                 TypeLine(ANSI_GREEN + "Enter PIN : " + ANSI_RESET);
                 String ph3 = in.nextLine();
                 if(FileUtils.checkinDataBase(ph, Integer.parseInt(ph3))) {
@@ -61,6 +60,7 @@ public class Main {
             } else if(ph.equals("--")) {
                 TypeLine(ANSI_GREEN + "Create a username : " + ANSI_RESET);
                 ph = in.nextLine();
+                username = ph;
                 TypeLine(ANSI_GREEN + "Create a PIN : " + ANSI_RESET);
                 String ph2 = in.nextLine();
                 newAccount = true;
@@ -82,10 +82,11 @@ public class Main {
             ph = in.nextLine();
             if (ph.toLowerCase().equals("cards")) {
                 gameutils.listcards(gameutils.currentdeck);
-                TypeLine(ANSI_BLUE + "These are your current cards.\nUsing the cards (and others that you create), you face opponents and try to defeat them.\nHere is the menu: " + ANSI_RESET);
+                TypeLine(ANSI_BLUE + "These are your current cards.\nUsing the cards (and others that you create), you face opponents and try to defeat them.\nHere is the menu: \n" + ANSI_RESET);
                 Menu(in, gameutils);
             }
         } else {
+            FileUtils.loadData(gameutils);
             Menu(in, gameutils);
         }
     }
@@ -93,7 +94,7 @@ public class Main {
     static void Menu(Scanner in, GameUtils gu) throws java.lang.Exception {
         String ph;
         TypeLine(ANSI_BLUE + "\n==========MENU==========" + ANSI_RESET);
-        TypeLine(ANSI_GREEN + "\n\t[p] Play level " + playGamelevel + ANSI_PURPLE + "\n\t[f] Forge a New Card" + ANSI_YELLOW + "\n\t[u] to upgrade a card" + ANSI_WHITE + "\n\t[c] to view Battle Deck" +
+        TypeLine(ANSI_GREEN + "\n\t[p] Play level " + playGamelevel + ANSI_PURPLE + "\n\t[f] Forge a New Card" + ANSI_YELLOW + "\n\t[u] Upgrade a card" + ANSI_BLACK + "\n\t[s] Save Game" + ANSI_RED + "\n\t[x] Quit" + ANSI_WHITE + "\n\t[c] View Battle Deck" +
                 "\n\t[m] Modify Battle Deck\n\t[v] View Card Inventory\n\t[l] Check player level\n\t[d] View amount of dust in balance\n\t[e] View this menu\n\t'STATS' (nameOfCard) to see card statistics\n\t" + "\u001B[22m" + "        i.e STATS Wizard" + ANSI_RESET);
         while(true) {
             TypeLine(ANSI_YELLOW + "\n[type a letter] --> " + ANSI_RESET);
@@ -114,6 +115,10 @@ public class Main {
                 TypeLine(ANSI_PURPLE + "Name of the Card: " + ANSI_RESET);
                 ph = in.nextLine();
                 gu.upgradeCard(ph);
+            } else if(ph.toLowerCase().equals("s")) {
+                FileUtils.saveGame(gu);
+            } else if(ph.toLowerCase().equals("x")) {
+                System.exit(0);
             } else if(ph.toLowerCase().equals("f")) {
                 String[] temp = new String[2];
                 ArrayList<Card> temp3 = new ArrayList<>();
@@ -143,7 +148,7 @@ public class Main {
                 TypeLine(ANSI_GREEN + ANSI_BOLD + "Dust: " + dust + ANSI_RESET);
             } else if(ph.length() > 1) {
                 if(ph.substring(0,5).toLowerCase().equals("stats")) {
-                    for(Card part : gu.currentdeck) {
+                    for(Card part : gu.overall) {
                         if((part.getName().toLowerCase()).equals(ph.substring(6).toLowerCase())) {
                             part.getFullStats();
                         }
