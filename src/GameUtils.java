@@ -28,9 +28,8 @@ public class GameUtils {
         inventory = new ArrayList<>(currentdeck);
     }
 
-    public void addCard(String name, int damage, int block, String cardType, String lore) {
-        inventory.add(new Card(name, damage, block, cardType, lore, 1));
-        overall.add(new Card(name, damage, block, cardType, lore, 1));
+    public void addCard(ArrayList<Card> deck, String name, int damage, int block, String cardType, String lore) {
+        deck.add(new Card(name, damage, block, cardType, lore, 1));
     }
 
     public void listcards(ArrayList<Card> deck) throws java.lang.Exception {
@@ -79,7 +78,8 @@ public class GameUtils {
                     Main.TypeLine(Main.ANSI_RED + "You do not have enough dust. (" + getdata2[1] + " needed)" + Main.ANSI_RESET);
                     return;
                 } else {
-                    addCard(getdata2[2], Integer.parseInt(getdata2[3]), Integer.parseInt(getdata2[4]), getdata2[5], getdata3[1]);
+                    addCard(inventory, getdata2[2], Integer.parseInt(getdata2[3]), Integer.parseInt(getdata2[4]), getdata2[5], getdata3[1]);
+                    addCard(overall, getdata2[2], Integer.parseInt(getdata2[3]), Integer.parseInt(getdata2[4]), getdata2[5], getdata3[1]);
                     for(Card x : inventory) {
                         if(x.getName().equals(getdata2[2])) {
                             Main.dust -= Integer.parseInt(getdata2[1]);
@@ -134,6 +134,20 @@ public class GameUtils {
                     Main.TypeLine(Main.ANSI_GREEN + "Successfully upgraded " + item.getName() + " to level " + item.getLevel() + ".\nYou now have " + Main.dust + " dust left.\nAfter Upgrade: \n" + Main.ANSI_RESET);
                     item.setDamage(item.getDamage() + 1);
                     item.setBlock(item.getBlock() + 1);
+                    for(Card part : currentdeck) {
+                        if(part.getName().equals(item.getName())) {
+                            part.setDamage(item.getDamage());
+                            part.setBlock(item.getBlock());
+                            part.setLevel(item.getLevel());
+                        }
+                    }
+                    for(Card element : inventory) {
+                        if(element.getName().equals(item.getName())) {
+                            element.setDamage(item.getDamage());
+                            element.setBlock(item.getBlock());
+                            element.setLevel(item.getLevel());
+                        }
+                    }
                     item.getFullStats();
                     return;
                 } else {
@@ -148,7 +162,7 @@ public class GameUtils {
         Scanner in = new Scanner(System.in);
         String ph;
         Main.TypeLine(Main.ANSI_YELLOW + "To add a card from inventory to battle deck, type 'ADD (cardName)'\nTo remove a card from battledeck, type 'REMOVE (cardName)'\n" +
-                "To see battle deck, type 'b'\nTo see inventory, type 'i'\nTo quit, type 'q'\n\n" + Main.ANSI_RESET);
+                "To see battle deck, type 'b'\nTo see inventory, type 'i'\nTo quit, type 'q'\n" + Main.ANSI_RESET);
         while(true) {
             Main.TypeLine(Main.ANSI_YELLOW + "\n>> " + Main.ANSI_RESET);
             ph = in.nextLine();
@@ -161,10 +175,10 @@ public class GameUtils {
             } else if(ph.length() > 1) {
                 if(ph.substring(0,3).toLowerCase().equals("add")) {
                     if(isCard(ph.substring(4), overall)) {
-                        if(currentdeck.contains(toCard(ph.substring(4)))) {
+                        if(isCard(ph.substring(4), currentdeck)) {
                             Main.TypeLine(Main.ANSI_RED + "This card is already in the battle deck." + Main.ANSI_RESET);
                         } else {
-                            currentdeck.add(toCard(ph.substring(4)));
+                            currentdeck.add(toCard(ph.substring(4), overall));
                         }
                     } else {
                         Main.TypeLine(Main.ANSI_RED + "That card does not exist." + Main.ANSI_RESET);
@@ -172,8 +186,8 @@ public class GameUtils {
 
                 } else if(ph.substring(0,6).toLowerCase().equals("remove")) {
                     if(isCard(ph.substring(7), overall)) {
-                        if(currentdeck.contains(toCard(ph.substring(7)))) {
-                            currentdeck.remove(currentdeck.indexOf(toCard(ph.substring(7))));
+                        if(isCard(ph.substring(7), currentdeck)) {
+                            currentdeck.remove(toCard(ph.substring(7), currentdeck));
                         } else {
                             Main.TypeLine(Main.ANSI_RED + "This card is not in your battle deck." + Main.ANSI_RESET);
                         }
@@ -213,7 +227,7 @@ public class GameUtils {
         }
         Main.TypeLine(Main.ANSI_GREEN + Main.ANSI_BOLD + "LEVEL " + Main.playGamelevel + "\n" + Main.ANSI_RESET);
         Main.TypeLine(Main.ANSI_GREEN + "You are fighting " + activeName + " (40 HP).\nYou will choose 1 of 3 cards in your battle deck to play\nagainst " + activeName + " repeatedly, and the first to bring the other's" +
-                "\nhealth points to 0, wins.\n(You start with 40 HP)\n" + Main.ANSI_RESET);
+                "\nhealth points to 0, wins. (Type 's' to surrender) \n(You start with 40 HP)\n" + Main.ANSI_RESET);
         int check = 0;
         while(true) {
             Main.TypeLine(Main.ANSI_BLUE + "Enter to Continue... " + Main.ANSI_RESET);
@@ -222,6 +236,10 @@ public class GameUtils {
             do {
                 Main.TypeLine(Main.ANSI_BOLD + Main.ANSI_PURPLE + "\nSelect a card (from above) to play: " + Main.ANSI_RESET);
                 ph = in.nextLine();
+                if(ph.equals("s")) {
+                    Main.TypeLine(Main.ANSI_RED + activeName + " has defeated you! Good luck next time." + Main.ANSI_RESET);
+                    return;
+                }
             } while(!isCard(ph, new ArrayList<Card>(Arrays.asList(playerDeck))));
             for(Card item : playerDeck) {
                 if(item.getName().toLowerCase().equals(ph.toLowerCase())) {
@@ -261,7 +279,6 @@ public class GameUtils {
                     Main.TypeLine(Main.ANSI_YELLOW + "Player level increased to " + (Main.playerlevel + 1) + ".\n" + Main.ANSI_RESET);
                     Main.playerlevel += 1;
                 }
-
                 return;
             }
 
@@ -305,8 +322,8 @@ public class GameUtils {
         return false;
      }
 
-     Card toCard(String ph) {
-        for(Card item : overall) {
+     Card toCard(String ph, ArrayList<Card> deck) {
+        for(Card item : deck) {
             if(item.getName().toLowerCase().equals(ph.toLowerCase())) {
                 return item;
             }
