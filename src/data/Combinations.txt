@@ -3,10 +3,13 @@ Wizard ## Fire = 1 20 Pyromancer 7 2 Magic "A wizard that specializes in fire. A
 Wizard ## Water = 1 25 Hydromancer 6 3 Magic "A wizard that specializes in waterbending. Makes sandwiches soggy.
 Wizard ## Electricity = 1 25 Scientist 7 1 Life "A wizard of the modern world. Evolved to eat more PB&Js.
 Fairy ## Water = 1 28 Healer 2 6 Magic "A magical fairy that heals people.
-Fairy ## Electricity = 1 29 Warlock 7 4 Magic "A wizard that specializes in voodoo. Enchants his utensils to make sandwiches.
+Fairy ## Electricity = 1 29 Warlock 7 3 Magic "A wizard that specializes in voodoo. Enchants his utensils to make sandwiches.
+Fairy ## Fire = 1 25 Demon 6 3 Magic "An evil spirit that hates sandwiches.
+Fairy ## Wizard = 1 27 ArchMagician 6 4 Magic "A better wizard that can fly.
 -level 2
 Electricity ## Water = 2 15 Energy 5 0 Science "A force that powers things.
 Energy ## Energy = 2 28 Nuclear_Energy 8 0 Science "An even greater force that powers things.
+Scientist ## Demon = 2 25 Golem 6 6 Magic "Forged together from lava, or something like that.
 -level 3
 Nuclear_Energy ## Scientist = 3 35 Megalomaniac 10 4 Life "Someone SO obsessed with power, he/she didn't make sandwiches anymore.
 Energy ## Scientist = 3 28 Wind_Turbine 8 2 Science "His creation was so big, it literally blew the judges away.
