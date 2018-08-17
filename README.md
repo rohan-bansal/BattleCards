@@ -1,6 +1,8 @@
 # BattleCards
 A console-based game in which cards are used to represent attacks.
 
+Download the complete game here: https://github.com/Rohan-Bansal/BattleCards/releases/tag/v1.5.6
+
 _100% complete_
 
 ## Features
