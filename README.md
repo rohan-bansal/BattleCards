@@ -9,6 +9,7 @@ _100% complete_
 - Multiple levels
 - Variety of cards, ability to forge them together to create new ones
 - Login System, stored as json files
+- Modifiable, easy card creation
 
 ### How to Download
 
